@@ -106,39 +106,3 @@ app.delete('/api/notes/:note_id', (req, res) => {
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
-
-
-
-
-
-
-//POST API route to post new note into the db.json file
-app.post('/api/notes', (req, res) => {
-    fs.readFile('./db/db.json', 'utf8', (error, data) => {
-        if (error) {
-            console.error(error)
-            return res.status(500).send("There was an error on the server")
-        }
-        const newNote = req.body
-        const parsedNotes = JSON.parse(data)
-        parsedNotes.push(newNote);
-        console.log(parsedNotes);
-        fs.writeFile('./db/db.json', JSON.stringify(parsedNotes), (err) =>
-            err ? console.error(err) : res.json(newNote))
-    }
-    );
-});
-
-//GET HTML route to take user to notes.html
-app.get('/notes', (req, res) =>
-    res.sendFile(path.join(__dirname, './public/notes.html'))
-);
-
-//GET HTML route to take user to index.html
-app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, './public/index.html'))
-);
-
-app.listen(PORT, () =>
-    console.log(`Serving static asset routes on port ${PORT}!`)
-);
