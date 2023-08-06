@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const uuid = require("./helpers/uuid");
 
-var PORT = process.env.PORT || 8080;
+const PORT = process.env.port || 3001;
 
 const app = express();
 
@@ -25,35 +25,41 @@ app.get("/notes", (req, res) =>
 //API Routes
 app.get("/api/notes", (req, res) => {
   // Send a message to the client
-  res.sendFile(path.join(__dirname, "/db/db.json")); // Log our request to the terminal
+  res.sendFile(path.join(__dirname, "/db/db.json"));
 
+  // Log our request to the terminal
   console.info(`${req.method} request received to get notes`);
 });
 
 // POST request to add a note
 app.post("/api/notes", (req, res) => {
   // Log that a POST request was received
-  console.info(`${req.method} request received to add a note`); // Destructuring assignment for the items in req.body
+  console.info(`${req.method} request received to add a note`);
 
-  const { title, text } = req.body; // If all the required properties are present
+  // Destructuring assignment for the items in req.body
+  const { title, text } = req.body;
 
+  // If all the required properties are present
   if (title && text) {
     // Variable for the object we will save
     const newNote = {
       title,
       text,
       note_id: uuid(),
-    }; // Obtain existing notes
+    };
 
+    // Obtain existing notes
     fs.readFile("./db/db.json", "utf8", (err, data) => {
       if (err) {
         console.error(err);
       } else {
         // Convert string into JSON object
-        const parsedNotes = JSON.parse(data); // Add a new note
+        const parsedNotes = JSON.parse(data);
 
-        parsedNotes.push(newNote); // Write updated notes back to the file
+        // Add a new note
+        parsedNotes.push(newNote);
 
+        // Write updated notes back to the file
         fs.writeFile(
           "./db/db.json",
           JSON.stringify(parsedNotes, null, 4),
@@ -69,6 +75,7 @@ app.post("/api/notes", (req, res) => {
       status: "success",
       body: newNote,
     };
+
     console.log(response);
     res.status(201).json(response);
   } else {

@@ -126,8 +126,9 @@ const renderNoteList = async (notes) => {
     noteList.forEach((el) => (el.innerHTML = ""));
   }
 
-  let noteListItems = []; // Returns HTML element with or without a delete button
+  let noteListItems = [];
 
+  // Returns HTML element with or without a delete button
   const createLi = (text, delBtn = true) => {
     const liEl = document.createElement("li");
     liEl.classList.add("list-group-item");
